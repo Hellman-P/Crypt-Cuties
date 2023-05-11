@@ -20,6 +20,7 @@ public class EnemyBehavior : MonoBehaviour
     public Transform enemyPosition;
     private Rigidbody enemyRB;
     PlayerController player;
+    PlayerComboDamage playerComboPoints;
 
     // Start is called before the first frame update
     void Start()
@@ -33,6 +34,7 @@ public class EnemyBehavior : MonoBehaviour
         invincibiltyFrameTime = 0.4f;
 
         player = GameObject.Find("Player").GetComponent<PlayerController>();
+        playerComboPoints = GameObject.Find("Combo attack area").GetComponent<PlayerComboDamage>();
     }
 
     // Update is called once per frame
@@ -53,11 +55,15 @@ public class EnemyBehavior : MonoBehaviour
             }
         }
 
-        // Dying
+        // Remove Skeleton from map, Give player health, give player combo points
         if (enemyHP <= 0)
         {
-            player.HPOnKill();
             Destroy(gameObject);
+            player.HPOnKill();
+            playerComboPoints.GetComboPoints();
+            //GetComponent<PlayerController>().HPOnKill();
+            //GetComponent<PlayerComboDamage>().GetComboPoints();
+            //Make bones scatter
         }
     }
 
@@ -69,6 +75,7 @@ public class EnemyBehavior : MonoBehaviour
             invincibiltyFrame = true;
 
             enemyHP -= damageAmount;
+            Debug.Log(enemyHP);
 
             // Pushing enemy away from player when taking damage
             Vector3 awayFromPlayer = (enemyPosition.position - playerPosition.position);

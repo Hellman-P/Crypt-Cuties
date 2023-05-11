@@ -11,12 +11,9 @@ public class PlayerDamage : MonoBehaviour
 
     public GameObject attackIndicator;
 
-    EnemyBehavior enemy;
-
     // Start is called before the first frame update
     void Start()
     {
-        enemy = GameObject.Find("Enemy").GetComponent<EnemyBehavior>();
         attackSpeed = 0.2f;
         attackCooldown = 0.8f;
     }
@@ -49,8 +46,9 @@ public class PlayerDamage : MonoBehaviour
             IEnumerator attackCooldownTimer()
             {
                 yield return new WaitForSeconds(attackSpeed);
-                damage = Random.Range(2, 3);
+                damage = Random.Range(4, 6);
                 other.GetComponent<EnemyBehavior>().TakeDamage(damage);
+                yield return new WaitForSeconds(attackCooldown); // this does nothing?
             }
         }
     }

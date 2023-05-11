@@ -39,7 +39,6 @@ public class EnemyDamage : MonoBehaviour
                 attackIndicator.gameObject.SetActive(true);
                 damage = Random.Range(2, 3);
                 player.TakeDamage(damage);
-                Debug.Log("damage");
                 yield return new WaitForSeconds(attackSpeed);
 
                 isAttacking = false;

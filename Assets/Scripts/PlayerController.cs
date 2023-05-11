@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
 
     //Combat Variables
     public float playerHP;
+    public float maxHP;
 
     // Hit detection Variables
     private Rigidbody playerRB;
@@ -18,7 +19,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerHP = 30;
+        playerHP = maxHP;
         playerRB = GetComponent<Rigidbody>();
     }
 
@@ -55,6 +56,9 @@ public class PlayerController : MonoBehaviour
     
     public void HPOnKill()
     {
-        playerHP += 1;
+        if (playerHP < maxHP)
+        {
+            playerHP += 1;
+        }
     }
 }
