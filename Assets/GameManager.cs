@@ -7,41 +7,61 @@ public class GameManager : MonoBehaviour
 {
     public Vector3[] spawners;
     public GameObject enemy;
-    private float spawnRate = 0.8f;
-
-    public TextMeshProUGUI scoreText;
-    private int score;
+    private float spawnRate = 1.4f;
+    private int enemiesRemaing;
 
     public TextMeshProUGUI levelText;
     private int level;
 
+    public TextMeshProUGUI scoreText;
+    private int score;
+
     // Start is called before the first frame update
     void Start()
     {
-        score = 0;
-        scoreText.text = "KILLS: " + score;
-
-        level = 0;
+        level = 1;
         levelText.text = "LEVEL: " + level;
 
-        StartCoroutine(SpawnEnemies());
+        score = 0;
+        scoreText.text = "KILLS: " + score;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
-    }
-
-    IEnumerator SpawnEnemies()
-    {
-        while (true)
+        StartCoroutine(nextLevel());
+        IEnumerator nextLevel()
         {
-            yield return new WaitForSeconds(spawnRate);
-            for (int i = 0; i < spawners.Length; i++)
+            enemiesRemaing = GameObject.FindGameObjectsWithTag("Enemy").Length;
+            if (enemiesRemaing == 0)
             {
-                Instantiate(enemy, spawners[i], enemy.transform.rotation);
+                UpdateLevel();
+                StartCoroutine(SpawnEnemies());
             }
         }
+    }
+
+    // Spawn a number of enemies according to current level
+    IEnumerator SpawnEnemies()
+    {
+        for (int l = 0; l < level; l++)
+        {
+            yield return new WaitForSeconds(spawnRate);
+            for (int s = 0; s < spawners.Length; s++)
+            {
+                Instantiate(enemy, spawners[s], enemy.transform.rotation);
+            }
+        }
+    }
+
+    private void UpdateLevel()
+    {
+        level++;
+        levelText.text = "LEVEL: " + level;
+    }
+    public void UpdateScore()
+    {
+        score++;
+        scoreText.text = "KILLS: " + score;
     }
 }

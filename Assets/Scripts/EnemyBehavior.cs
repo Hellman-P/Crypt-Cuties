@@ -8,7 +8,6 @@ public class EnemyBehavior : MonoBehaviour
     public float speed = 7.0f;
     public float acceleration = 100f;
     public float rotationSpeed;
-    public Transform playerPosition;
 
     // Combat Variables
     public float enemyHP;
@@ -16,11 +15,14 @@ public class EnemyBehavior : MonoBehaviour
     private bool invincibiltyFrame;
     private float invincibiltyFrameTime;
     private float stunDuration;
-    private float knockBackStrength = 3f;
+    private float knockBackStrength = 4.5f;
     public Transform enemyPosition;
     private Rigidbody enemyRB;
     PlayerController player;
     PlayerComboDamage playerComboPoints;
+
+    // Score and Level Keeping
+    GameManager gameManager;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +37,7 @@ public class EnemyBehavior : MonoBehaviour
 
         player = GameObject.Find("Player").GetComponent<PlayerController>();
         playerComboPoints = GameObject.Find("Combo attack area").GetComponent<PlayerComboDamage>();
+        gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
     }
 
     // Update is called once per frame
@@ -43,7 +46,7 @@ public class EnemyBehavior : MonoBehaviour
         if (stunned == false)
         {
             // Following and rotating towards player
-            Vector3 direction = (playerPosition.position - transform.position).normalized;
+            Vector3 direction = (player.transform.position - transform.position).normalized;
 
             enemyRB.AddForce(direction * acceleration);
             enemyRB.velocity = Vector3.ClampMagnitude(enemyRB.velocity, speed);
@@ -61,8 +64,8 @@ public class EnemyBehavior : MonoBehaviour
             Destroy(gameObject);
             player.HPOnKill();
             playerComboPoints.GetComboPoints();
-            //GetComponent<PlayerController>().HPOnKill();
-            //GetComponent<PlayerComboDamage>().GetComboPoints();
+            player.HPOnKill();
+            gameManager.UpdateScore();
             //Make bones scatter
         }
     }
@@ -78,7 +81,7 @@ public class EnemyBehavior : MonoBehaviour
             Debug.Log(enemyHP);
 
             // Pushing enemy away from player when taking damage
-            Vector3 awayFromPlayer = (enemyPosition.position - playerPosition.position);
+            Vector3 awayFromPlayer = (enemyPosition.position - player.transform.position);
             enemyRB.AddForce(awayFromPlayer * knockBackStrength, ForceMode.Impulse);
 
             StartCoroutine(stunTimer());

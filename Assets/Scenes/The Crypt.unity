@@ -173,8 +173,8 @@ MonoBehaviour:
   - {x: -5, y: 1, z: -5.4}
   - {x: -9, y: 1, z: 0}
   enemy: {fileID: 9035586572010957456, guid: 829d84872d8363541ade639ed088b7a2, type: 3}
-  scoreText: {fileID: 1622883840}
   levelText: {fileID: 1096513426}
+  scoreText: {fileID: 1622883840}
 --- !u!1 &728277882
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,7 +367,7 @@ MonoBehaviour:
   rotationSpeed: 720
   acceleration: 100
   playerHP: 0
-  maxHP: 30
+  maxHP: 999
 --- !u!4 &924078206
 Transform:
   m_ObjectHideFlags: 0
