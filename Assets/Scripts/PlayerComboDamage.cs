@@ -1,16 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerComboDamage : MonoBehaviour
 {
     private float damage;
     private float attackSpeed;
-    public float CurrentComboMeter; // make this private later
+    private float CurrentComboMeter;
     public float fullComboMeter;
     public bool inCombo;
     public float duration;
-    private bool damageframe;
+
+    public TextMeshProUGUI comboUI;
 
     public GameObject comboAttackIndicator;
 
@@ -18,7 +20,7 @@ public class PlayerComboDamage : MonoBehaviour
     void Start()
     {
         attackSpeed = 0.08f;
-        CurrentComboMeter = 0; // make this fill up with kills and make it start at 0
+        CurrentComboMeter = 0;
     }
 
     // Update is called once per frame
@@ -34,6 +36,8 @@ public class PlayerComboDamage : MonoBehaviour
         {
             Debug.Log("You have no combo points!");
         }
+        // showing combo points
+        comboUI.text = "COMBO: " + CurrentComboMeter + "/" + fullComboMeter; 
     }
 
     IEnumerator ComboAttackIndicator()
@@ -72,7 +76,7 @@ public class PlayerComboDamage : MonoBehaviour
     {
         if (other.CompareTag("Enemy") && inCombo)
         {
-            damage = Random.Range(3, 5);
+            damage = Random.Range(3, 9);
             other.GetComponent<EnemyBehavior>().TakeDamage(damage);
         }
     }

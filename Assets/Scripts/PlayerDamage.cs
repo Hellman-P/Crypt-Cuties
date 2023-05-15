@@ -12,6 +12,8 @@ public class PlayerDamage : MonoBehaviour
 
     public GameObject attackIndicator;
 
+    public PlayerComboDamage comboCheck;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +25,7 @@ public class PlayerDamage : MonoBehaviour
     void Update()
     {
         // Show attack indicator when holding down space
-        if (Input.GetKey(KeyCode.Space) && showingAttack == false)
+        if (Input.GetKey(KeyCode.Space) && showingAttack == false && !comboCheck.inCombo)
         {
             showingAttack = true;
             StartCoroutine(attackCooldownTimer());
@@ -43,9 +45,9 @@ public class PlayerDamage : MonoBehaviour
     // Deals damage to skeletons in damage area when holding space
     private void OnTriggerStay(Collider other)
     {
-        if(other.CompareTag("Enemy") && damageFrame)
+        if(other.CompareTag("Enemy") && damageFrame && !comboCheck.inCombo)
         {
-            damage = Random.Range(4, 6);
+            damage = Random.Range(4, 7);
             other.GetComponent<EnemyBehavior>().TakeDamage(damage);
         }
     }

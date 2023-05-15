@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,6 +16,9 @@ public class PlayerController : MonoBehaviour
 
     // Hit detection Variables
     private Rigidbody playerRB;
+
+    //UI
+    public TextMeshProUGUI hpUI;
 
     // Start is called before the first frame update
     void Start()
@@ -44,6 +48,8 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.fixedDeltaTime);
         }
 
+        hpUI.text = "HP: " + playerHP + "/" + maxHP;
+
         // Dying
         if (playerHP < 1)
         {
@@ -60,7 +66,11 @@ public class PlayerController : MonoBehaviour
     {
         if (playerHP < maxHP)
         {
-            playerHP += 1;
+            playerHP += 3;
+        }
+        if (playerHP > maxHP)
+        {
+            playerHP = maxHP;
         }
     }
 }
