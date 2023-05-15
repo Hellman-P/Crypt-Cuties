@@ -6,16 +6,17 @@ public class PlayerDamage : MonoBehaviour
 {
     private float damage;
     private float attackSpeed;
-    private float attackCooldown;
+    private float showingTrigger;
     private bool showingAttack;
+    private bool damageFrame;
 
     public GameObject attackIndicator;
 
     // Start is called before the first frame update
     void Start()
     {
-        attackSpeed = 0.2f;
-        attackCooldown = 0.8f;
+        attackSpeed = 0.3f;
+        showingTrigger = 0.2f;
     }
 
     // Update is called once per frame
@@ -25,13 +26,15 @@ public class PlayerDamage : MonoBehaviour
         if (Input.GetKey(KeyCode.Space) && showingAttack == false)
         {
             showingAttack = true;
-            attackIndicator.gameObject.SetActive(true);
             StartCoroutine(attackCooldownTimer());
             IEnumerator attackCooldownTimer()
             {
                 yield return new WaitForSeconds(attackSpeed);
+                damageFrame = true;
+                attackIndicator.gameObject.SetActive(true);
+                yield return new WaitForSeconds(showingTrigger);
                 attackIndicator.gameObject.SetActive(false);
-                yield return new WaitForSeconds(attackCooldown);
+                damageFrame = false;
                 showingAttack = false;
             }
         }
@@ -40,16 +43,10 @@ public class PlayerDamage : MonoBehaviour
     // Deals damage to skeletons in damage area when holding space
     private void OnTriggerStay(Collider other)
     {
-        if(other.CompareTag("Enemy") && Input.GetKey(KeyCode.Space))
+        if(other.CompareTag("Enemy") && damageFrame)
         {
-            StartCoroutine(attackCooldownTimer());
-            IEnumerator attackCooldownTimer()
-            {
-                yield return new WaitForSeconds(attackSpeed);
-                damage = Random.Range(4, 6);
-                other.GetComponent<EnemyBehavior>().TakeDamage(damage);
-                yield return new WaitForSeconds(attackCooldown); // this does nothing?
-            }
+            damage = Random.Range(4, 6);
+            other.GetComponent<EnemyBehavior>().TakeDamage(damage);
         }
     }
 }

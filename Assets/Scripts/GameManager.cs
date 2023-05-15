@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     private int score;
 
+    private bool spawnRateWait = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -24,6 +26,8 @@ public class GameManager : MonoBehaviour
 
         score = 0;
         scoreText.text = "KILLS: " + score;
+
+        StartCoroutine(SpawnEnemies());
     }
 
     // Update is called once per frame
@@ -31,18 +35,12 @@ public class GameManager : MonoBehaviour
     {
         enemiesRemaing = GameObject.FindGameObjectsWithTag("Enemy").Length;
 
-        if (enemiesRemaing == 0)
+        if (enemiesRemaing == 0 && !spawnRateWait)
         {
-            StartCoroutine(NextLevel());
+            UpdateLevel();
+            StartCoroutine(SpawnEnemies());
+            spawnRateWait = true;
         }
-    }
-
-    IEnumerator NextLevel()
-    {
-        yield return new WaitForSeconds(5.0f);
-        UpdateLevel();
-        yield return new WaitForSeconds(5.0f);
-        StartCoroutine(SpawnEnemies());
     }
 
     // Spawn a number of enemies according to current level
@@ -56,6 +54,7 @@ public class GameManager : MonoBehaviour
                 Instantiate(enemy, spawners[s], enemy.transform.rotation);
             }
         }
+        spawnRateWait = false;
     }
 
     private void UpdateLevel()
@@ -63,6 +62,7 @@ public class GameManager : MonoBehaviour
         level++;
         levelText.text = "LEVEL: " + level;
     }
+
     public void UpdateScore()
     {
         score++;

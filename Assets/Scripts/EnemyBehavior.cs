@@ -47,6 +47,7 @@ public class EnemyBehavior : MonoBehaviour
         {
             // Following and rotating towards player
             Vector3 direction = (player.transform.position - transform.position).normalized;
+            direction = new Vector3(direction.x, 0, direction.z);
 
             enemyRB.AddForce(direction * acceleration);
             enemyRB.velocity = Vector3.ClampMagnitude(enemyRB.velocity, speed);
@@ -56,17 +57,6 @@ public class EnemyBehavior : MonoBehaviour
                 Quaternion toRotation = Quaternion.LookRotation(direction, Vector3.up);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.fixedDeltaTime);
             }
-        }
-
-        // Remove Skeleton from map, Give player health, give player combo points
-        if (enemyHP <= 0)
-        {
-            Destroy(gameObject);
-            player.HPOnKill();
-            playerComboPoints.GetComboPoints();
-            player.HPOnKill();
-            gameManager.UpdateScore();
-            //Make bones scatter
         }
     }
 
@@ -96,6 +86,16 @@ public class EnemyBehavior : MonoBehaviour
                 yield return new WaitForSeconds(stunDuration);
                 stunned = false;
             }
+        }
+        // Remove Skeleton from map, Give player health, give player combo points
+        if (enemyHP <= 0)
+        {
+            player.HPOnKill();
+            playerComboPoints.GetComboPoints();
+            player.HPOnKill();
+            gameManager.UpdateScore();
+            Destroy(gameObject, 0.01f);
+            //Make bones scatter
         }
     }
 }

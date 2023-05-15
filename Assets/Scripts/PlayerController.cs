@@ -30,11 +30,13 @@ public class PlayerController : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
 
+        Vector3 planeVelocity = new Vector3(playerRB.velocity.x, 0, playerRB.velocity.z);
         Vector3 movementDirection = new Vector3(horizontalInput, 0, verticalInput);
         movementDirection.Normalize();
 
         playerRB.AddForce(movementDirection * acceleration);
-        playerRB.velocity = Vector3.ClampMagnitude(playerRB.velocity, speed);
+        planeVelocity = Vector3.ClampMagnitude(planeVelocity, speed);
+        playerRB.velocity = planeVelocity + playerRB.velocity.y * Vector3.up;
 
         if (movementDirection != Vector3.zero)
         {

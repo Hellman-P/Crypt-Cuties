@@ -479,6 +479,7 @@ MonoBehaviour:
   CurrentComboMeter: 0
   fullComboMeter: 10
   inCombo: 0
+  duration: 4
   comboAttackIndicator: {fileID: 1792716463}
 --- !u!1 &1096513424
 GameObject:
