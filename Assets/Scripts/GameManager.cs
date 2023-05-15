@@ -29,16 +29,20 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        StartCoroutine(nextLevel());
-        IEnumerator nextLevel()
+        enemiesRemaing = GameObject.FindGameObjectsWithTag("Enemy").Length;
+
+        if (enemiesRemaing == 0)
         {
-            enemiesRemaing = GameObject.FindGameObjectsWithTag("Enemy").Length;
-            if (enemiesRemaing == 0)
-            {
-                UpdateLevel();
-                StartCoroutine(SpawnEnemies());
-            }
+            StartCoroutine(NextLevel());
         }
+    }
+
+    IEnumerator NextLevel()
+    {
+        yield return new WaitForSeconds(5.0f);
+        UpdateLevel();
+        yield return new WaitForSeconds(5.0f);
+        StartCoroutine(SpawnEnemies());
     }
 
     // Spawn a number of enemies according to current level
