@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -16,7 +18,11 @@ public class GameManager : MonoBehaviour
     public TextMeshProUGUI scoreText;
     private int score;
 
+    public Button startButton;
+
     private bool spawnRateWait = true;
+
+    public bool isGameActive;
 
     // Start is called before the first frame update
     void Start()
@@ -26,7 +32,12 @@ public class GameManager : MonoBehaviour
 
         score = 0;
         scoreText.text = "KILLS: " + score;
+    }
 
+    public void StartGame()
+    {
+        isGameActive = true;
+        startButton.gameObject.SetActive(false);
         StartCoroutine(SpawnEnemies());
     }
 
@@ -67,5 +78,10 @@ public class GameManager : MonoBehaviour
     {
         score++;
         scoreText.text = "KILLS: " + score;
+    }
+
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

@@ -2,13 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
     // Movements Variables
-    public float speed = 10.0f;
+    public float speed;
     public float rotationSpeed;
-    public float acceleration = 1000f;
+    public float acceleration;
 
     //Combat Variables
     public float playerHP;
@@ -19,49 +20,67 @@ public class PlayerController : MonoBehaviour
 
     //UI
     public TextMeshProUGUI hpUI;
+    public TextMeshProUGUI gameOverText;
+    public Button restartButton;
+
+    public GameManager isGameActive;
 
     // Start is called before the first frame update
     void Start()
     {
         playerHP = maxHP;
         playerRB = GetComponent<Rigidbody>();
+        hpUI.text = "HP: " + playerHP + "/" + maxHP;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        // Moving and Rotating Player
-        float horizontalInput = Input.GetAxis("Horizontal");
-        float verticalInput = Input.GetAxis("Vertical");
-
-        Vector3 planeVelocity = new Vector3(playerRB.velocity.x, 0, playerRB.velocity.z);
-        Vector3 movementDirection = new Vector3(horizontalInput, 0, verticalInput);
-        movementDirection.Normalize();
-
-        playerRB.AddForce(movementDirection * acceleration);
-        planeVelocity = Vector3.ClampMagnitude(planeVelocity, speed);
-        playerRB.velocity = planeVelocity + playerRB.velocity.y * Vector3.up;
-
-        if (movementDirection != Vector3.zero)
+        if (isGameActive.isGameActive)
         {
-            Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.fixedDeltaTime);
-        }
+            // Moving and Rotating Player
+            float horizontalInput = Input.GetAxis("Horizontal");
+            float verticalInput = Input.GetAxis("Vertical");
 
-        hpUI.text = "HP: " + playerHP + "/" + maxHP;
+            Vector3 planeVelocity = new Vector3(playerRB.velocity.x, 0, playerRB.velocity.z);
+            Vector3 movementDirection = new Vector3(horizontalInput, 0, verticalInput);
+            movementDirection.Normalize();
 
-        // Dying
-        if (playerHP < 1)
-        {
-            Destroy(gameObject);
+            playerRB.AddForce(movementDirection * acceleration);
+            planeVelocity = Vector3.ClampMagnitude(planeVelocity, speed);
+            playerRB.velocity = planeVelocity + playerRB.velocity.y * Vector3.up;
+
+            if (movementDirection != Vector3.zero)
+            {
+                Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
+                transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.fixedDeltaTime);
+            }
+
+            hpUI.text = "HP: " + playerHP + "/" + maxHP;
         }
     }
 
     public void TakeDamage(float damageAmount)
     {
         playerHP -= damageAmount;
+
+        // Dying
+        if (playerHP < 1)
+        {
+            playerHP = 0;
+            Destroy(gameObject, 0.01f);
+            gameOverText.gameObject.SetActive(true);
+            restartButton.gameObject.SetActive(true);
+            isGameActive.isGameActive = false;
+        }
+        hpUI.text = "HP: " + playerHP + "/" + maxHP;
     }
     
+    public bool IsAlive()
+    {
+        return playerHP > 0;
+    }
+
     public void HPOnKill()
     {
         if (playerHP < maxHP)

@@ -6,7 +6,7 @@ public class EnemyDamage : MonoBehaviour
 {
     private float damage;
     private float attackSpeed;
-    private bool isAttacking;
+    public bool isAttacking;
 
     public GameObject attackIndicator;
 
@@ -36,8 +36,9 @@ public class EnemyDamage : MonoBehaviour
             StartCoroutine(attackCooldownTimer());
             IEnumerator attackCooldownTimer()
             {
+                yield return new WaitForSeconds(attackSpeed);
                 attackIndicator.gameObject.SetActive(true);
-                damage = Random.Range(2, 3);
+                damage = Random.Range(1, 3);
                 player.TakeDamage(damage);
                 yield return new WaitForSeconds(attackSpeed);
 

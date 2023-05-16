@@ -16,6 +16,8 @@ public class PlayerComboDamage : MonoBehaviour
 
     public GameObject comboAttackIndicator;
 
+    public PlayerController changeMoveSpeedOnCombo;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -43,7 +45,7 @@ public class PlayerComboDamage : MonoBehaviour
     IEnumerator ComboAttackIndicator()
     {
         yield return new WaitForEndOfFrame();
-
+        changeMoveSpeedOnCombo.speed = 6;
         CurrentComboMeter = 0;
         inCombo = true;
         StartCoroutine(ComboDuration());
@@ -60,6 +62,7 @@ public class PlayerComboDamage : MonoBehaviour
     {
         yield return new WaitForSeconds(duration);
         inCombo = false;
+        changeMoveSpeedOnCombo.speed = 3;
     }
 
     // adding points to combo meter if it's not full and player is not currently in combo

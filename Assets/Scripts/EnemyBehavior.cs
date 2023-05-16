@@ -5,8 +5,8 @@ using UnityEngine;
 public class EnemyBehavior : MonoBehaviour
 {
     // Movements Variables
-    public float speed = 7.0f;
-    public float acceleration = 100f;
+    public float speed;
+    public float acceleration;
     public float rotationSpeed;
 
     // Combat Variables
@@ -15,11 +15,12 @@ public class EnemyBehavior : MonoBehaviour
     private bool invincibiltyFrame;
     private float invincibiltyFrameTime;
     private float stunDuration;
-    private float knockBackStrength = 4.5f;
+    private float knockBackStrength = 4.0f;
     public Transform enemyPosition;
     private Rigidbody enemyRB;
     PlayerController player;
     PlayerComboDamage playerComboPoints;
+    public EnemyDamage isAttacking;
 
     // Score and Level Keeping
     GameManager gameManager;
@@ -27,13 +28,11 @@ public class EnemyBehavior : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        enemyHP = 12;
-
         enemyRB = GetComponent<Rigidbody>();
 
         stunned = false;
         stunDuration = 0.4f;
-        invincibiltyFrameTime = 0.4f;
+        invincibiltyFrameTime = 0.3f;
 
         player = GameObject.Find("Player").GetComponent<PlayerController>();
         playerComboPoints = GameObject.Find("Combo attack area").GetComponent<PlayerComboDamage>();
@@ -43,13 +42,13 @@ public class EnemyBehavior : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (stunned == false)
+        if (stunned == false && player !=null && player.IsAlive() && !isAttacking.isAttacking)
         {
             // Following and rotating towards player
             Vector3 direction = (player.transform.position - transform.position).normalized;
             direction = new Vector3(direction.x, 0, direction.z);
 
-            enemyRB.AddForce(direction * acceleration);
+            enemyRB.AddForce(enemyRB.transform.forward * acceleration);
             enemyRB.velocity = Vector3.ClampMagnitude(enemyRB.velocity, speed);
 
             if (direction != Vector3.zero)
@@ -68,7 +67,6 @@ public class EnemyBehavior : MonoBehaviour
             invincibiltyFrame = true;
 
             enemyHP -= damageAmount;
-            Debug.Log(enemyHP);
 
             // Pushing enemy away from player when taking damage
             Vector3 awayFromPlayer = (enemyPosition.position - player.transform.position);
@@ -77,7 +75,7 @@ public class EnemyBehavior : MonoBehaviour
             StartCoroutine(stunTimer());
             IEnumerator stunTimer()
             { 
-            // Stunning enemy when taking damage
+            // Stunning enemy when taking damage 
                 stunned = true;
                 yield return new WaitForSeconds(invincibiltyFrameTime);
                 invincibiltyFrame = false;
@@ -91,9 +89,8 @@ public class EnemyBehavior : MonoBehaviour
         if (enemyHP <= 0)
         {
             player.HPOnKill();
-            playerComboPoints.GetComboPoints();
-            player.HPOnKill();
             gameManager.UpdateScore();
+            playerComboPoints.GetComboPoints();
             Destroy(gameObject, 0.01f);
             //Make bones scatter
         }

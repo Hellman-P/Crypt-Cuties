@@ -14,6 +14,16 @@ public class PlayerDamage : MonoBehaviour
 
     public PlayerComboDamage comboCheck;
 
+    public GameManager isGameActive;
+
+    public PlayerController changeMoveSpeedOnAttack;
+
+    public Transform bulletSpawn;
+
+    public GameObject bulletPrefab;
+
+    public float bulletSpeed = 10;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -25,10 +35,11 @@ public class PlayerDamage : MonoBehaviour
     void Update()
     {
         // Show attack indicator when holding down space
-        if (Input.GetKey(KeyCode.Space) && showingAttack == false && !comboCheck.inCombo)
+        if (Input.GetKey(KeyCode.Space) && showingAttack == false && !comboCheck.inCombo && isGameActive.isGameActive)
         {
             showingAttack = true;
             StartCoroutine(attackCooldownTimer());
+            StartCoroutine(modifyMoveSpeedOnAttack());
             IEnumerator attackCooldownTimer()
             {
                 yield return new WaitForSeconds(attackSpeed);
@@ -42,12 +53,20 @@ public class PlayerDamage : MonoBehaviour
         }
     }
 
-    // Deals damage to skeletons in damage area when holding space
+    IEnumerator modifyMoveSpeedOnAttack()
+    {
+        changeMoveSpeedOnAttack.speed = 0.7f;
+        yield return new WaitForSeconds(attackSpeed + 0.2f);
+        changeMoveSpeedOnAttack.speed = 3;
+    }
+    
+
+    // Dealing damage with attack
     private void OnTriggerStay(Collider other)
     {
         if(other.CompareTag("Enemy") && damageFrame && !comboCheck.inCombo)
         {
-            damage = Random.Range(4, 7);
+            damage = Random.Range(6, 12);
             other.GetComponent<EnemyBehavior>().TakeDamage(damage);
         }
     }
