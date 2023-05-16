@@ -4,16 +4,18 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Undefined
   - Enemy
+  - Wall
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Bullet Layer
   - Water
   - UI
   - post procesing
-  - 
+  - Enemy Layer
   - 
   - 
   - 

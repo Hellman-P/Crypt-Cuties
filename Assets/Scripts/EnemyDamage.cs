@@ -18,7 +18,7 @@ public class EnemyDamage : MonoBehaviour
     void Start()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
-        attackSpeed = 0.8f;
+        attackSpeed = 0.6f;
         isAttacking = false;
     }
 

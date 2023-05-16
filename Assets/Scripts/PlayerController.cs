@@ -83,9 +83,10 @@ public class PlayerController : MonoBehaviour
 
     public void HPOnKill()
     {
+        float heal = Random.Range(1, 2);
         if (playerHP < maxHP)
         {
-            playerHP += 3;
+            playerHP += heal;
         }
         if (playerHP > maxHP)
         {

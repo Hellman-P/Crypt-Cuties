@@ -15,7 +15,7 @@ public class EnemyBehavior : MonoBehaviour
     private bool invincibiltyFrame;
     private float invincibiltyFrameTime;
     private float stunDuration;
-    private float knockBackStrength = 4.0f;
+    private float knockBackStrength = 1.0f;
     public Transform enemyPosition;
     private Rigidbody enemyRB;
     PlayerController player;

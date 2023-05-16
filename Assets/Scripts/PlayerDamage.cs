@@ -7,7 +7,7 @@ public class PlayerDamage : MonoBehaviour
     private float damage;
     private float attackSpeed;
     private float showingTrigger;
-    private bool showingAttack;
+    private bool attackOnCooldown;
     private bool damageFrame;
 
     public GameObject attackIndicator;
@@ -17,6 +17,7 @@ public class PlayerDamage : MonoBehaviour
     public GameManager isGameActive;
 
     public PlayerController changeMoveSpeedOnAttack;
+    public PlayerController changeRotationSpeedOnAttack;
 
     public Transform bulletSpawn;
 
@@ -24,31 +25,33 @@ public class PlayerDamage : MonoBehaviour
 
     public float bulletSpeed = 10;
 
+    private float attackCooldown;
+
     // Start is called before the first frame update
     void Start()
     {
-        attackSpeed = 0.3f;
-        showingTrigger = 0.2f;
+        attackSpeed = 0.2f;
+        attackCooldown = 0.8f;
+
     }
 
     // Update is called once per frame
     void Update()
     {
         // Show attack indicator when holding down space
-        if (Input.GetKey(KeyCode.Space) && showingAttack == false && !comboCheck.inCombo && isGameActive.isGameActive)
+        if (Input.GetKeyDown(KeyCode.Space) && !comboCheck.inCombo && isGameActive.isGameActive && !attackOnCooldown)
         {
-            showingAttack = true;
             StartCoroutine(attackCooldownTimer());
             StartCoroutine(modifyMoveSpeedOnAttack());
+            attackOnCooldown = true;
+
             IEnumerator attackCooldownTimer()
             {
                 yield return new WaitForSeconds(attackSpeed);
-                damageFrame = true;
-                attackIndicator.gameObject.SetActive(true);
-                yield return new WaitForSeconds(showingTrigger);
-                attackIndicator.gameObject.SetActive(false);
-                damageFrame = false;
-                showingAttack = false;
+                var bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
+
+                yield return new WaitForSeconds(attackCooldown);
+                attackOnCooldown = false;
             }
         }
     }
@@ -56,18 +59,9 @@ public class PlayerDamage : MonoBehaviour
     IEnumerator modifyMoveSpeedOnAttack()
     {
         changeMoveSpeedOnAttack.speed = 0.7f;
-        yield return new WaitForSeconds(attackSpeed + 0.2f);
+        changeRotationSpeedOnAttack.rotationSpeed = 300f;
+        yield return new WaitForSeconds(attackSpeed);
         changeMoveSpeedOnAttack.speed = 3;
-    }
-    
-
-    // Dealing damage with attack
-    private void OnTriggerStay(Collider other)
-    {
-        if(other.CompareTag("Enemy") && damageFrame && !comboCheck.inCombo)
-        {
-            damage = Random.Range(6, 12);
-            other.GetComponent<EnemyBehavior>().TakeDamage(damage);
-        }
+        changeRotationSpeedOnAttack.rotationSpeed = 720f;
     }
 }
