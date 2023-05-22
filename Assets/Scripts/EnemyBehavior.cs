@@ -25,10 +25,15 @@ public class EnemyBehavior : MonoBehaviour
     // Score and Level Keeping
     GameManager gameManager;
 
+    // Animations
+    private Animator skeletonAnimationController;
+
     // Start is called before the first frame update
     void Start()
     {
         enemyRB = GetComponent<Rigidbody>();
+
+        skeletonAnimationController = GetComponent<Animator>();
 
         stunned = false;
         stunDuration = 0.4f;
@@ -42,8 +47,11 @@ public class EnemyBehavior : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (stunned == false && player !=null && player.IsAlive() && !isAttacking.isAttacking)
+        if (!stunned && player !=null && player.IsAlive() && !isAttacking.isAttacking)
         {
+            // Walking Animation
+            skeletonAnimationController.SetBool("isWalking", true);
+
             // Following and rotating towards player
             Vector3 direction = (player.transform.position - transform.position).normalized;
             direction = new Vector3(direction.x, 0, direction.z);
@@ -66,6 +74,9 @@ public class EnemyBehavior : MonoBehaviour
         {
             invincibiltyFrame = true;
 
+            skeletonAnimationController.SetBool("isWalking", false);
+            skeletonAnimationController.SetBool("isStunned", true);
+
             enemyHP -= damageAmount;
 
             // Pushing enemy away from player when taking damage
@@ -83,6 +94,7 @@ public class EnemyBehavior : MonoBehaviour
 
                 yield return new WaitForSeconds(stunDuration);
                 stunned = false;
+                skeletonAnimationController.SetBool("isStunned", false);
             }
         }
         // Remove Skeleton from map, Give player health, give player combo points

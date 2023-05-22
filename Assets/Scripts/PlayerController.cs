@@ -19,9 +19,10 @@ public class PlayerController : MonoBehaviour
     private Rigidbody playerRB;
 
     //UI
-    public TextMeshProUGUI hpUI;
     public TextMeshProUGUI gameOverText;
     public Button restartButton;
+    public Slider hpBar;
+    public GameObject Blood;
 
     public GameManager isGameActive;
 
@@ -30,7 +31,6 @@ public class PlayerController : MonoBehaviour
     {
         playerHP = maxHP;
         playerRB = GetComponent<Rigidbody>();
-        hpUI.text = "HP: " + playerHP + "/" + maxHP;
     }
 
     // Update is called once per frame
@@ -56,24 +56,24 @@ public class PlayerController : MonoBehaviour
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.fixedDeltaTime);
             }
 
-            hpUI.text = "HP: " + playerHP + "/" + maxHP;
+            hpBar.value = playerHP;
         }
     }
 
     public void TakeDamage(float damageAmount)
     {
         playerHP -= damageAmount;
-
+        Instantiate(Blood, transform.position + transform.up * 1.5f, Quaternion.identity);
         // Dying
-        if (playerHP < 1)
+        if (playerHP <= 0)
         {
             playerHP = 0;
             Destroy(gameObject, 0.01f);
             gameOverText.gameObject.SetActive(true);
             restartButton.gameObject.SetActive(true);
             isGameActive.isGameActive = false;
+            hpBar.value = playerHP;
         }
-        hpUI.text = "HP: " + playerHP + "/" + maxHP;
     }
     
     public bool IsAlive()

@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
+
     public Vector3[] spawners;
     public GameObject enemy;
     private float spawnRate = 1.4f;
@@ -27,6 +29,8 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        instance = this;
+
         level = 1;
         levelText.text = "LEVEL: " + level;
 

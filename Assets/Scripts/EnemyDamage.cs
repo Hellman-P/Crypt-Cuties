@@ -4,21 +4,28 @@ using UnityEngine;
 
 public class EnemyDamage : MonoBehaviour
 {
-    private float damage;
     private float attackSpeed;
+    private float waitAfterAttack;
     public bool isAttacking;
 
     public GameObject attackIndicator;
 
-    PlayerController player;
+    private PlayerController player;
 
     public EnemyBehavior enemyScript;
+    public Collider spear;
+
+
+
+    // Animations
+    public Animator skeletonAnimationController;
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
-        attackSpeed = 0.6f;
+        attackSpeed = 0.55f;
+        waitAfterAttack = 0.3f;
         isAttacking = false;
     }
 
@@ -30,20 +37,20 @@ public class EnemyDamage : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player") && isAttacking == false && enemyScript.stunned == false)
+        if (other.CompareTag("Player") && isAttacking == false && enemyScript.stunned == false && (GameManager.instance.isGameActive))
         {
+            skeletonAnimationController.SetBool("isAttacking", true);
             isAttacking = true;
             StartCoroutine(attackCooldownTimer());
             IEnumerator attackCooldownTimer()
             {
                 yield return new WaitForSeconds(attackSpeed);
-                attackIndicator.gameObject.SetActive(true);
-                damage = Random.Range(1, 3);
-                player.TakeDamage(damage);
-                yield return new WaitForSeconds(attackSpeed);
-
+                spear.enabled = true;
+                spear.GetComponent<EnemyDamagePoint>().canDamage = true;
+                yield return new WaitForSeconds(waitAfterAttack);
                 isAttacking = false;
-                attackIndicator.gameObject.SetActive(false);
+                skeletonAnimationController.SetBool("isAttacking", false);
+                spear.enabled = false;
             }
         }
     }

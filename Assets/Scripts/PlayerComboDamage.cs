@@ -2,17 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class PlayerComboDamage : MonoBehaviour
 {
     private float damage;
     private float attackSpeed;
-    private float CurrentComboMeter;
+    private float currentComboMeter;
     public float fullComboMeter;
     public bool inCombo;
     public float duration;
 
-    public TextMeshProUGUI comboUI;
+    public Slider comboBar;
 
     public GameObject comboAttackIndicator;
 
@@ -22,31 +23,31 @@ public class PlayerComboDamage : MonoBehaviour
     void Start()
     {
         attackSpeed = 0.08f;
-        CurrentComboMeter = 0;
+        currentComboMeter = 0;
     }
 
     // Update is called once per frame
     void Update()
     {
         // if the players combo bar is full and they press r start the combo attack
-        if (CurrentComboMeter == fullComboMeter && Input.GetKeyDown(KeyCode.R) && !inCombo)
+        if (currentComboMeter == fullComboMeter && Input.GetKeyDown(KeyCode.R) && !inCombo)
         {
             StartCoroutine(ComboAttackIndicator());
         }
         // if the player tries to combo attack without points
-        else if (CurrentComboMeter < fullComboMeter && Input.GetKeyDown(KeyCode.R))
+        else if (currentComboMeter < fullComboMeter && Input.GetKeyDown(KeyCode.R))
         {
             Debug.Log("You have no combo points!");
         }
         // showing combo points
-        comboUI.text = "COMBO: " + CurrentComboMeter + "/" + fullComboMeter; 
+        comboBar.value = currentComboMeter;
     }
 
     IEnumerator ComboAttackIndicator()
     {
         yield return new WaitForEndOfFrame();
         changeMoveSpeedOnCombo.speed = 6;
-        CurrentComboMeter = 0;
+        currentComboMeter = 0;
         inCombo = true;
         StartCoroutine(ComboDuration());
         while (inCombo)
@@ -68,9 +69,9 @@ public class PlayerComboDamage : MonoBehaviour
     // adding points to combo meter if it's not full and player is not currently in combo
     public void GetComboPoints()
     {
-        if (CurrentComboMeter < fullComboMeter && !inCombo)
+        if (currentComboMeter < fullComboMeter && !inCombo)
         {
-            CurrentComboMeter++;
+            currentComboMeter++;
         }
     }
 
