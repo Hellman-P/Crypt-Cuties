@@ -19,6 +19,9 @@ public class PlayerComboDamage : MonoBehaviour
 
     public PlayerController changeMoveSpeedOnCombo;
 
+    // Animations
+    public Animator playerAnimationController;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -33,6 +36,7 @@ public class PlayerComboDamage : MonoBehaviour
         if (currentComboMeter == fullComboMeter && Input.GetKeyDown(KeyCode.R) && !inCombo)
         {
             StartCoroutine(ComboAttackIndicator());
+            playerAnimationController.SetBool("isSpecial", true);
         }
         // if the player tries to combo attack without points
         else if (currentComboMeter < fullComboMeter && Input.GetKeyDown(KeyCode.R))
@@ -63,6 +67,7 @@ public class PlayerComboDamage : MonoBehaviour
     {
         yield return new WaitForSeconds(duration);
         inCombo = false;
+        playerAnimationController.SetBool("isSpecial", false);
         changeMoveSpeedOnCombo.speed = 3;
     }
 

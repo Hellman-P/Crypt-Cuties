@@ -26,11 +26,15 @@ public class PlayerController : MonoBehaviour
 
     public GameManager isGameActive;
 
+    // Animations
+    private Animator playerAnimationController;
+
     // Start is called before the first frame update
     void Start()
     {
         playerHP = maxHP;
         playerRB = GetComponent<Rigidbody>();
+        playerAnimationController.SetBool("isidle", true);
     }
 
     // Update is called once per frame

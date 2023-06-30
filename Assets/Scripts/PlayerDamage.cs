@@ -27,6 +27,9 @@ public class PlayerDamage : MonoBehaviour
 
     private float attackCooldown;
 
+    // Animations
+    public Animator playerAnimationController;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -44,13 +47,14 @@ public class PlayerDamage : MonoBehaviour
             StartCoroutine(attackCooldownTimer());
             StartCoroutine(modifyMoveSpeedOnAttack());
             attackOnCooldown = true;
-
+            playerAnimationController.SetBool("isAttacking", true);
             IEnumerator attackCooldownTimer()
             {
                 yield return new WaitForSeconds(attackSpeed);
                 var bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
 
                 yield return new WaitForSeconds(attackCooldown);
+                playerAnimationController.SetBool("isAttacking", false);
                 attackOnCooldown = false;
             }
         }
