@@ -56,7 +56,7 @@ public class EnemyBehavior : MonoBehaviour
             Vector3 direction = (player.transform.position - transform.position).normalized;
             direction = new Vector3(direction.x, 0, direction.z);
 
-            enemyRB.AddForce(enemyRB.transform.forward * acceleration);
+            //enemyRB.AddForce(enemyRB.transform.forward * acceleration);
             enemyRB.velocity = Vector3.ClampMagnitude(enemyRB.velocity, speed);
 
             if (direction != Vector3.zero)

@@ -27,14 +27,13 @@ public class PlayerController : MonoBehaviour
     public GameManager isGameActive;
 
     // Animations
-    private Animator playerAnimationController;
+    public Animator playerAnimationController;
 
     // Start is called before the first frame update
     void Start()
     {
         playerHP = maxHP;
         playerRB = GetComponent<Rigidbody>();
-        playerAnimationController.SetBool("isidle", true);
     }
 
     // Update is called once per frame
@@ -58,6 +57,15 @@ public class PlayerController : MonoBehaviour
             {
                 Quaternion toRotation = Quaternion.LookRotation(movementDirection, Vector3.up);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.fixedDeltaTime);
+            }
+
+            if (horizontalInput == 0 || verticalInput == 0)
+            {
+                playerAnimationController.SetBool("isIdle", true);
+            }
+            else
+            {
+                playerAnimationController.SetBool("isIdle", false);
             }
 
             hpBar.value = playerHP;
