@@ -22,7 +22,7 @@ public class EnemyDamagePoint : MonoBehaviour
     {
         if (other.CompareTag("Player") && canDamage)
         {
-            damage = Random.Range(1, 3);
+            damage = Random.Range(7, 13);
             player.TakeDamage(damage);
             canDamage = false;
         }
