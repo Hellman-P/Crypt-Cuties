@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerDamage : MonoBehaviour
 {
     private float damage;
-    private float attackSpeed;
+    public float attackSpeed;
     private float showingTrigger;
     private bool attackOnCooldown;
     private bool damageFrame;
@@ -25,7 +25,7 @@ public class PlayerDamage : MonoBehaviour
 
     public float bulletSpeed = 10;
 
-    private float attackCooldown;
+    public float attackCooldown;
 
     // Animations
     public Animator playerAnimationController;
@@ -33,8 +33,6 @@ public class PlayerDamage : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        attackSpeed = 0.2f;
-        attackCooldown = 0.8f;
 
     }
 

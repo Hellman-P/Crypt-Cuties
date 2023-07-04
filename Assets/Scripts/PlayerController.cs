@@ -59,13 +59,13 @@ public class PlayerController : MonoBehaviour
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, toRotation, rotationSpeed * Time.fixedDeltaTime);
             }
 
-            if (horizontalInput == 0 || verticalInput == 0)
+            if (horizontalInput > 0 || verticalInput > 0 || horizontalInput < 0 || verticalInput < 0)
             {
-                playerAnimationController.SetBool("isIdle", true);
+                playerAnimationController.SetBool("isWalking", true);
             }
             else
             {
-                playerAnimationController.SetBool("isIdle", false);
+                playerAnimationController.SetBool("isWalking", false);
             }
 
             hpBar.value = playerHP;

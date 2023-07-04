@@ -29,7 +29,6 @@ public class BulletLogic : MonoBehaviour
         else if (other.CompareTag("Wall"))
         {
             Destroy(gameObject, 0.1f);
-            // explode animation
         }
     }
     IEnumerator DestroyAfterDuration()
