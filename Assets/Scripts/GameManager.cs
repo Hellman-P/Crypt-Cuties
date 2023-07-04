@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     private int enemiesRemaing;
 
     public TextMeshProUGUI levelText;
-    private int level;
+    public int level;
 
     public TextMeshProUGUI scoreText;
     private int score;

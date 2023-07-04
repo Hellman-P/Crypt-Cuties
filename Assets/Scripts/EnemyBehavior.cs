@@ -27,6 +27,7 @@ public class EnemyBehavior : MonoBehaviour
 
     // Animations
     private Animator skeletonAnimationController;
+    public GameObject Blood;
 
     // Start is called before the first frame update
     void Start()
@@ -56,7 +57,7 @@ public class EnemyBehavior : MonoBehaviour
             Vector3 direction = (player.transform.position - transform.position).normalized;
             direction = new Vector3(direction.x, 0, direction.z);
 
-            //enemyRB.AddForce(enemyRB.transform.forward * acceleration);
+            enemyRB.AddForce(enemyRB.transform.forward * acceleration);
             enemyRB.velocity = Vector3.ClampMagnitude(enemyRB.velocity, speed);
 
             if (direction != Vector3.zero)
@@ -78,6 +79,7 @@ public class EnemyBehavior : MonoBehaviour
             skeletonAnimationController.SetBool("isStunned", true);
 
             enemyHP -= damageAmount;
+            Instantiate(Blood, transform.position + transform.up * 1.5f, Quaternion.identity);
 
             // Pushing enemy away from player when taking damage
             Vector3 awayFromPlayer = (enemyPosition.position - player.transform.position);

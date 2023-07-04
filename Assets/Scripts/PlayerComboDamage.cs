@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class PlayerComboDamage : MonoBehaviour
 {
     private float damage;
-    private float attackSpeed;
     private float currentComboMeter;
     public float fullComboMeter;
     public bool inCombo;
@@ -25,7 +24,6 @@ public class PlayerComboDamage : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        attackSpeed = 0.08f;
         currentComboMeter = 0;
     }
 
@@ -53,14 +51,9 @@ public class PlayerComboDamage : MonoBehaviour
         changeMoveSpeedOnCombo.speed = 6;
         currentComboMeter = 0;
         inCombo = true;
+        comboAttackIndicator.gameObject.SetActive(true);
         StartCoroutine(ComboDuration());
-        while (inCombo)
-        {
-            comboAttackIndicator.gameObject.SetActive(true);
-            yield return new WaitForSeconds(attackSpeed);
-            comboAttackIndicator.gameObject.SetActive(false);
-            yield return new WaitForSeconds(attackSpeed);
-        }
+
     }
 
     IEnumerator ComboDuration()
@@ -68,6 +61,7 @@ public class PlayerComboDamage : MonoBehaviour
         yield return new WaitForSeconds(duration);
         inCombo = false;
         playerAnimationController.SetBool("isSpecial", false);
+        comboAttackIndicator.gameObject.SetActive(false);
         changeMoveSpeedOnCombo.speed = 3;
     }
 

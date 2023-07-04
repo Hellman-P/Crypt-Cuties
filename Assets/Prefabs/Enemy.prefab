@@ -437,6 +437,7 @@ MonoBehaviour:
   stunned: 0
   enemyPosition: {fileID: 3303448294707542032}
   isAttacking: {fileID: 1114257721789266695}
+  Blood: {fileID: 6138897113337524795, guid: f13c78a2a55732c40b1cd33af1c75383, type: 3}
 --- !u!54 &4430022842392087754
 Rigidbody:
   m_ObjectHideFlags: 0
