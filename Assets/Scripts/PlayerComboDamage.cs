@@ -18,8 +18,9 @@ public class PlayerComboDamage : MonoBehaviour
 
     public PlayerController changeMoveSpeedOnCombo;
 
-    // Animations
+    // Animations & Sound
     public Animator playerAnimationController;
+    public AudioSource spin2winSound;
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +36,7 @@ public class PlayerComboDamage : MonoBehaviour
         {
             StartCoroutine(ComboAttackIndicator());
             playerAnimationController.SetBool("isSpecial", true);
+            spin2winSound.Play();
         }
         // if the player tries to combo attack without points
         else if (currentComboMeter < fullComboMeter && Input.GetKeyDown(KeyCode.R))

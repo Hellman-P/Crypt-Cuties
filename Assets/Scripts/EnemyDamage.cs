@@ -17,14 +17,16 @@ public class EnemyDamage : MonoBehaviour
 
 
 
-    // Animations
+    // Animations & Sound
     public Animator skeletonAnimationController;
+    SkeletonSoundPlayer skeletonSoundPlayer;
 
     // Start is called before the first frame update
     void Start()
     {
         player = GameObject.Find("Player").GetComponent<PlayerController>();
-        attackSpeed = 0.55f;
+        skeletonSoundPlayer = GameObject.Find("Sound Manager").GetComponent<SkeletonSoundPlayer>();
+        attackSpeed = 0.45f;
         waitAfterAttack = 0.3f;
         isAttacking = false;
     }
@@ -45,6 +47,7 @@ public class EnemyDamage : MonoBehaviour
             IEnumerator attackCooldownTimer()
             {
                 yield return new WaitForSeconds(attackSpeed);
+                skeletonSoundPlayer.PlayAttackSound();
                 spear.enabled = true;
                 spear.GetComponent<EnemyDamagePoint>().canDamage = true;
                 yield return new WaitForSeconds(waitAfterAttack);

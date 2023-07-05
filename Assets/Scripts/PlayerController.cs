@@ -26,8 +26,9 @@ public class PlayerController : MonoBehaviour
 
     public GameManager isGameActive;
 
-    // Animations
+    // Animations & Sound
     public Animator playerAnimationController;
+    public AudioSource damageTakenSound;
 
     // Start is called before the first frame update
     void Start()
@@ -76,7 +77,8 @@ public class PlayerController : MonoBehaviour
     {
         playerHP -= damageAmount;
         Instantiate(Blood, transform.position + transform.up * 1.5f, Quaternion.identity);
-        // Dying
+        damageTakenSound.Play();
+
         if (playerHP <= 0)
         {
             playerHP = 0;

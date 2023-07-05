@@ -438,6 +438,7 @@ MonoBehaviour:
   enemyPosition: {fileID: 3303448294707542032}
   isAttacking: {fileID: 1114257721789266695}
   Blood: {fileID: 6138897113337524795, guid: f13c78a2a55732c40b1cd33af1c75383, type: 3}
+  skeletonDamageTakenSound: {fileID: 0}
 --- !u!54 &4430022842392087754
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -615,6 +616,7 @@ MonoBehaviour:
   enemyScript: {fileID: 5491703659595761980}
   spear: {fileID: 7381871736514820086}
   skeletonAnimationController: {fileID: 5952083188143183006}
+  skeletonAttackSound: {fileID: 0}
 --- !u!1 &1642024145149946888
 GameObject:
   m_ObjectHideFlags: 0

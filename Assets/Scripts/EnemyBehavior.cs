@@ -25,9 +25,10 @@ public class EnemyBehavior : MonoBehaviour
     // Score and Level Keeping
     GameManager gameManager;
 
-    // Animations
+    // Animations & Sound
     private Animator skeletonAnimationController;
     public GameObject Blood;
+    SkeletonSoundPlayer skeletonSoundPlayer;
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +44,7 @@ public class EnemyBehavior : MonoBehaviour
         player = GameObject.Find("Player").GetComponent<PlayerController>();
         playerComboPoints = GameObject.Find("Combo attack area").GetComponent<PlayerComboDamage>();
         gameManager = GameObject.Find("Game Manager").GetComponent<GameManager>();
+        skeletonSoundPlayer = GameObject.Find("Sound Manager").GetComponent<SkeletonSoundPlayer>();
     }
 
     // Update is called once per frame
@@ -74,6 +76,7 @@ public class EnemyBehavior : MonoBehaviour
         if (!invincibiltyFrame)
         {
             invincibiltyFrame = true;
+            skeletonSoundPlayer.PlayDamageSound();
 
             skeletonAnimationController.SetBool("isWalking", false);
             skeletonAnimationController.SetBool("isStunned", true);

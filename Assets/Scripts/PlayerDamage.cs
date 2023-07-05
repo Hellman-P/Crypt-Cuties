@@ -27,8 +27,9 @@ public class PlayerDamage : MonoBehaviour
 
     public float attackCooldown;
 
-    // Animations
+    // Animations & Sound
     public Animator playerAnimationController;
+    public AudioSource basicAttackSound;
 
     // Start is called before the first frame update
     void Start()
@@ -50,6 +51,7 @@ public class PlayerDamage : MonoBehaviour
             {
                 yield return new WaitForSeconds(attackSpeed);
                 var bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
+                basicAttackSound.Play();
 
                 yield return new WaitForSeconds(attackCooldown);
                 playerAnimationController.SetBool("isAttacking", false);
